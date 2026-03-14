@@ -41,7 +41,7 @@ CREATE TABLE dim_project (
 
 
 -- ================================================================
--- TABLE 3 — dim_equipment
+-- TABLE 2 — dim_equipment
 -- Physical equipment items tracked through the supply chain.
 -- Added vs original: criticality, hs_code, embedding
 --   hs_code   → TARIFF_RISK_AGENT looks up tariff rates by HS code
@@ -67,7 +67,7 @@ CREATE TABLE dim_equipment (
  
 
 -- ================================================================
--- TABLE 5 — dim_supplier
+-- TABLE 3 — dim_supplier
 -- Vendor / manufacturer who makes and ships equipment.
 -- Added vs original: country, region, shipping_port, risk_tier, embedding
 --   shipping_port → LOGISTICS_RISK_AGENT uses this as origin port
@@ -115,7 +115,7 @@ CREATE TABLE dim_milestone (
 
  
 -- ================================================================
--- TABLE 2 — dim_work_package
+-- TABLE 5 — dim_work_package
 -- Groups equipment into logical work packages within a project.
 -- Added vs original: project_id FK, status, start_date, end_date
 -- ================================================================
@@ -159,7 +159,7 @@ CREATE TABLE dim_equipment_supplier (
  
 
 -- ================================================================
--- TABLE 10 — dim_manufacturing_location
+-- TABLE 7 — dim_manufacturing_location
 -- WHERE equipment is physically manufactured.
 -- RESTRUCTURED vs original:
 --   Original had equipment_id + supplier_id FKs making it
@@ -188,7 +188,7 @@ CREATE TABLE dim_manufacturing_location (
 );
  
 -- ================================================================
--- TABLE 11 — dim_logistics_info
+-- TABLE 8 — dim_logistics_info
 -- Shipping route details per equipment item.
 -- LOGISTICS_RISK_AGENT extracts shipping_port + receiving_port
 -- to build its Tavily search query.
@@ -211,7 +211,7 @@ CREATE TABLE dim_logistics_info (
 );
  
 -- ================================================================
--- TABLE 8 — fact_p6_schedule
+-- TABLE 9 — fact_p6_schedule
 -- P6 Primavera project schedule — planned vs forecast dates.
 -- This is SCHEDULER_AGENT's primary data source.
 -- Added vs original: forecast_finish, percent_complete, float_days,
@@ -249,7 +249,7 @@ CREATE TABLE fact_p6_schedule (
 );
 
 -- ================================================================
--- TABLE 7 — fact_purchase_order
+-- TABLE 10 — fact_purchase_order
 -- PO records: the commercial link between project, supplier, equipment.
 -- Added vs original: delivery_date_forecast, manufacturing_location_id
 -- ================================================================
@@ -278,7 +278,7 @@ CREATE TABLE fact_purchase_order (
 );
 
 -- ================================================================
--- TABLE 9 — fact_equipment_milestone_schedule
+-- TABLE 11 — fact_equipment_milestone_schedule
 -- Granular milestone tracking per equipment item.
 -- More detailed than fact_p6_schedule — one row per milestone per equipment.
 -- Added vs original: forecast_date, delay_days (GENERATED), status
@@ -311,7 +311,7 @@ CREATE TABLE fact_equipment_milestone_schedule (
 );
 
 -- ================================================================
--- TABLE 13 — dim_agent_session
+-- TABLE 12 — dim_agent_session
 -- NEW — not in original RiskWise.
 -- One row per user conversation / full analysis run.
 -- Tracks the complete lifecycle of a multi-agent workflow.
@@ -349,7 +349,7 @@ CREATE TABLE dim_agent_session (
 
 
 -- ================================================================
--- TABLE 12 — dim_agent_event_log
+-- TABLE 13 — dim_agent_event_log
 -- SLIMMED DOWN vs original.
 -- Original stored full agent_output (entire response text) here.
 -- Yours stores session-level events only — what happened, not what was thought.
